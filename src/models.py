@@ -2,61 +2,67 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-class User(db.Model):
+class first_gen(db.Model):
+    __tablename__ = 'first_gen'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    last_name = db.Column(db.String(120), unique=True, nullable=False)
+    age = db.Column(db.String(3), unique=False, nullable=False)
+    second_gen = db.relationship('second_gen',backref='first_gen', lazy=True)
+    third_gen = db.relationship('third_gen', backref='firt_gen', lazy=True)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<first_gen %r>' % self.name
 
     def serialize(self):
         return {
             "id": self.id,
-            "nombre": self.nombre,
-            # do not serialize the password, its a security breach
+            "name": self.name,
+            "last_name" self.last_name,
+            "age": self.age
         }
 
-class Abuelos(db.Model):
+class second_gen(db.Model):
+    __tablename__ = 'second_gen'
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(120), unique=False, nullable=False)
-    apellido = db.Column(db.String(80), unique=False, nullable=False)
-    edad = db.Column(db.Integer(3), unique=False, nullable=False)
-    referencia_id = db.Column(db.Integer(3), unique=False, nullable=False)
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    last_name = db.Column(db.String(120), unique=True, nullable=False)
+    age = db.Column(db.String(3), unique=False, nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('first_gen.id'), nullable=False)
+    third_gen = db.relationship('third_gen', backref='second_gen', lazy=True)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Parent %r>' % self.id
 
     def serialize(self):
         return {
             "id": self.id,
-            "nombre": self.nombre,
-            "apellido": self.apellido,
-            "edad": self.edad,
-            "is_active": self.is_active
-            # do not serialize the password, its a security breach
+            "name": self.name,
+            "last_name": self.lastname,
+            "age": self.age
+
+
         }
+
+class Grand_parent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    lastname = db.Column(db.String(80), unique=False, nullable=False)
+    age = db.Column(db.String(3), unique=False, nullable=False)
+    children = db.relationship('Parent', backref='grand_parent', lazy=True)
+
+
     
-class Padres(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(120), unique=False, nullable=False)
-    apellido = db.Column(db.String(80), unique=False, nullable=False)
-    edad = db.Column(db.Integer(3), unique=False, nullable=False)
-    abuelo_id = db.Column(db.Integer(3), ForeignKey('abuelos.id'))
-    is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Grand_parent %r>' % self.id
 
     def serialize(self):
         return {
             "id": self.id,
-            "nombre": self.nombre,
-            "apellido": self.apellido,
-            "edad": self.edad,
-            "abuelo_id": self.abuelo_id,
-            "is_active": self.is_active
+            "name": self.name,
+            "lastname": self.lastname,
+            "age": self.age
+
             # do not serialize the password, its a security breach
         }
