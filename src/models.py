@@ -32,7 +32,7 @@ class second_gen(db.Model):
     name = db.Column(db.String(120), unique=True, nullable=False)
     last_name = db.Column(db.String(120), unique=True, nullable=False)
     age = db.Column(db.String(3), unique=False, nullable=False)
-    parent_id = db.Column(db.Integer, db.ForeignKey('first_gen.id'), nullable=False),
+    parent_id = db.Column(db.Integer, db.ForeignKey('first_gen.id'), nullable=False)
     children_id = db.Column(db.Integer, db.ForeignKey('third_gen.id'), nullable=False)
     third_gen = db.relationship('third_gen', backref='second_gen', lazy=True)
     first_gen = db.relationship('first_gen', backref='second_gen', lazy=True)
