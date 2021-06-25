@@ -20,6 +20,46 @@ db.init_app(app)
 CORS(app)
 setup_admin(app)
 
+
+@app.route('/first_gen', methods=['GET'])
+def get_all_first_gen():    
+    first_gen_all= first_gen.query.all()
+    actual_first_gen = []
+    for gen in first_gen_all:
+        print(gen.serialize())
+        actual_first_gen.append(gen.serialize())
+
+    return jsonify(actual_first_gen), 200
+
+@app.route('/second_gen', methods=['GET'])
+def get_all_second_gen():    
+    second_gen_all = second_gen.query.all()
+    actual_second_gen = []
+    for gen in second_gen_all:
+        print(gen.serialize())
+        actual_second_gen.append(gen.serialize())
+
+    return jsonify(actual_second_gen), 200    
+
+@app.route('/third_gen', methods=['GET'])
+def get_all_third_gen():    
+    third_gen_all = third_gen.query.all()
+    actual_third_gen = []
+    for gen in third_gen_all:
+        print(gen.serialize())
+        actual_third_gen.append(gen.serialize())
+
+    return jsonify(actual_third_gen), 200    
+
+
+
+
+
+
+
+
+
+
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
